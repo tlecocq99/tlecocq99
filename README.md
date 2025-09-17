@@ -16,66 +16,108 @@
 
 ---
 
-## About me
+## About Me
 
-I’m a Junior Software Developer, recently certified in Software Engineering through the Institute of Data. While I’m actively seeking my first industry role, I’ve been building real-world web projects to strengthen my portfolio—prioritizing clean architecture, accessible UI, and SEO-friendly best practices.
+I’m a Junior Software Developer recently certified in Software Engineering (Institute of Data). I build real-world, production-style web experiences with attention to clean component architecture, accessibility, responsive design, performance, and SEO metadata.
 
-- Certified: Software Engineering (Institute of Data)
-- Focus: Frontend-heavy full‑stack with React/Next.js, TailwindCSS, MongoDB, and GCP integrations
-- Looking for: Junior/Graduate Software Developer roles (open to collaborating with engineering teams and product/design)
-- Languages: English and French (fluent)
-- Global perspective: Lived on 3 continents (North America, Europe, Asia)
+- Role targets: Full‑stack or Front‑end Web Developer (open to design-collaborative teams)
+- Tech focus: React / Next.js / Vite / TailwindCSS / MongoDB / Google Cloud integrations
+- Strengths: Rapid prototyping → production polish; semantic, accessible UI; structured SEO metadata
+- Certifications: Software Engineering — Institute of Data
+- Languages: English & French (fluent)
+- Global perspective: Lived across North America, Europe & Asia
+- Currently: Open to junior opportunities (remote / hybrid welcome)
 
-## Tech stack
+---
+
+## Tech Stack
 
 <p>
   <img src="https://skillicons.dev/icons?i=react,nextjs,vite,tailwind,js,html,css,mongodb,gcp,git,github&perline=11" alt="Tech stack icons" />
 </p>
 
-- Frontend: React, Next.js, Vite, TailwindCSS
-- Backend/DB: MongoDB, API integration, server-side rendering (Next.js)
-- Cloud/DevOps: Google Cloud integrations, Git/GitHub, CI/CD basics
-- SEO: Metadata, structured content, performance-minded builds
+- Front‑end: React, Next.js (SSR/ISR), Vite, TailwindCSS
+- Back‑end & Data: API integration patterns, MongoDB basics, server components
+- Cloud / Tooling: Google Cloud integrations, GitHub Actions
+- Quality: Performance tuning (bundle awareness), metadata & structured markup (SEO), accessibility awareness
 
 ---
 
-## Featured projects
+## Featured Projects
+
+<!-- Using github-readme-stats pinned cards + fallbacks for reliability -->
 
 <table>
 <tr>
-<td>
+<td width="50%">
+  <a href="https://oslo-vikings.vercel.app/" target="_blank"><strong>Oslo-Vikings</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oslo-Vikings">
-    <img alt="Oslo-Vikings" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent" />
+    <img alt="Oslo-Vikings repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent&cache_seconds=7200" />
   </a>
-  <p><strong>Oslo-Vikings</strong> — Modern web experience with a focus on clean UI, performance, and SEO.</p>
+  <br/>
+  <em>Modern club site emphasizing clean UI structure, SEO metadata, and fast load.</em><br/>
+  <sub>Stack: Next.js, TailwindCSS, SEO meta + structured content.</sub><br/>
+  <a href="https://oslo-vikings.vercel.app/">Live site →</a>
 </td>
-<td>
+<td width="50%">
+  <a href="https://oil-x.vercel.app/" target="_blank"><strong>Oil-X</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oil-X">
-    <img alt="Oil-X" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=transparent" />
+    <img alt="Oil-X repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=transparent&cache_seconds=7200" />
   </a>
-  <p><strong>Oil-X</strong> — Product-focused build highlighting UX and component reusability.</p>
+  <br/>
+  <em>Product-focused build showcasing reusable component patterns & brand cohesion.</em><br/>
+  <sub>Stack: React, Vite, TailwindCSS.</sub><br/>
+  <a href="https://oil-x.vercel.app/">Live site →</a>
 </td>
 </tr>
 <tr>
-<td>
+<td width="50%">
+  <a href="https://github.com/ClearChoicePools/ClearChoice" target="_blank"><strong>Clear Choice Pools</strong></a><br/>
   <a href="https://github.com/ClearChoicePools/ClearChoice">
-    <img alt="Clear Choice Pools" src="https://github-readme-stats.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=transparent" />
+    <img alt="Clear Choice Pools repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=transparent&cache_seconds=7200&show_owner=true" />
   </a>
-  <p><strong>Clear Choice Pools</strong> — Real-world site work emphasizing brand, content structure, and maintainability.</p>
+  <br/>
+  <em>Brand-site work focusing on content structure & maintainability for future scaling.</em><br/>
+  <sub>Stack: Next.js, UI fundamentals, SEO.</sub>
+  <a href="https://clearchoicepools.org/">Live site →</a>
 </td>
-<td>
-  <!-- TODO: Add repo link when available -->
-  <a href="#">
-    <img alt="Hummingbird Sips" src="https://img.shields.io/badge/Hummingbird%20Sips-Repo%20link%20TBA-6f42c1?style=flat&logo=github&logoColor=white" />
+<td width="50%">
+  <a href="https://github.com/tlecocq99/HummingbirdMobileSips" target="_blank"><strong>Hummingbird Sips</strong></a><br/>
+  <a href="https://github.com/tlecocq99/HummingbirdMobileSips">
+    <img alt="Hummingbird Sips repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=HummingbirdMobileSips&theme=transparent&cache_seconds=7200" />
   </a>
-  <p><strong>Hummingbird Sips</strong> — Hospitality/brand presence; design-forward with strong SEO foundations. (Link coming soon—happy to add!)</p>
+  <br/>
+  <em>Hospitality brand presence; design-forward layout with performance + SEO fundamentals.</em><br/>
+  <sub>Stack: Next.js / TailwindCSS / structured metadata.</sub>
 </td>
 </tr>
 </table>
 
+### More Projects
+- <a href="https://onboardingfun.vercel.app/">Onboarding (Interactive Demo)</a> — Gamified onboarding UX prototype ([repo](https://github.com/tlecocq99/OnboardingFun))
+- Explore additional repos below or on my profile
+
+<details>
+  <summary><strong>Fallback badges (in case pinned cards fail)</strong></summary>
+  <p>
+    <a href="https://github.com/tlecocq99/Oslo-Vikings">
+      <img src="https://img.shields.io/github/stars/tlecocq99/Oslo-Vikings?style=flat" alt="Oslo-Vikings stars">
+    </a>
+    <a href="https://github.com/tlecocq99/Oil-X">
+      <img src="https://img.shields.io/github/last-commit/tlecocq99/Oil-X?style=flat" alt="Oil-X last commit">
+    </a>
+    <a href="https://github.com/tlecocq99/HummingbirdMobileSips">
+      <img src="https://img.shields.io/github/languages/top/tlecocq99/HummingbirdMobileSips?style=flat" alt="Top language Hummingbird Sips">
+    </a>
+    <a href="https://github.com/ClearChoicePools/ClearChoice">
+      <img src="https://img.shields.io/github/issues/ClearChoicePools/ClearChoice?style=flat" alt="Issues Clear Choice">
+    </a>
+  </p>
+</details>
+
 ---
 
-## Stats and activity
+## Stats & Activity
 
 <p>
   <img height="165" alt="GitHub Stats" src="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&include_all_commits=true&count_private=true&theme=transparent" />
@@ -97,10 +139,10 @@ I’m a Junior Software Developer, recently certified in Software Engineering th
 
 ---
 
-## Beyond code
+## Beyond Code
 
-- Hobbies: Coding, music (piano, guitar, singing), and spending time with family and friends
-- Fun facts: Fluent in English and French. I’ve lived across North America, Europe, and Asia—giving me a strong appreciation for diverse cultures and teams.
+- Hobbies: Coding, music (piano, guitar, singing), time with family & friends
+- Fun facts: Fluent in English & French; lived across North America, Europe & Asia → culturally adaptive teammate
 
 ## Get in touch
 
