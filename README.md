@@ -52,7 +52,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://oslo-vikings.vercel.app/" target="_blank"><strong>Oslo-Vikings</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oslo-Vikings">
-    <img alt="Oslo-Vikings repo card" src="github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent&cache_seconds=7200" />
+    <img alt="Oslo-Vikings repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent&cache_seconds=7200" />
   </a>
   <br/>
   <em>Modern club site emphasizing clean UI structure, SEO metadata, and fast load.</em><br/>
