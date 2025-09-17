@@ -119,20 +119,11 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 
 ## Stats & Activity
 
-<p>
-  <picture>
-  <source
-    srcset="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&theme=dark"
-    media="(prefers-color-scheme: dark)"
-  />
-  <source
-    srcset="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true"
-    media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
-  />
-  <img src="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true" />
-</picture>
-</p>
+[![Thomas' GitHub stats](https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&count_private=true&cache_seconds=7200)](https://github.com/anuraghazra/github-readme-stats)
 
+<p>
+  <img height="160" alt="Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=tlecocq99&layout=compact&langs_count=8&theme=transparent&cache_seconds=7200" />
+</p>
 <p>
   <img alt="GitHub Streak" src="https://streak-stats.demolab.com?user=tlecocq99&theme=transparent&hide_border=true" />
 </p>
