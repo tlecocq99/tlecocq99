@@ -2,14 +2,14 @@ name: Simple Stats
 
 on:
   schedule:
-    - cron: "30 6 * * *"   # (Optional) Daily at 06:30 UTC. Change or remove if you prefer weekly.
-  workflow_dispatch:        # Lets you run it manually from the Actions tab.
+    - cron: "30 6 * * *"   # Daily at 06:30 UTC
+  workflow_dispatch:
 
 permissions:
-  contents: write           # Needed so the workflow can commit simple-stats.md
+  contents: write
 
 concurrency:
-  group: simple-stats       # Prevent overlapping runs
+  group: simple-stats
   cancel-in-progress: false
 
 jobs:
@@ -21,84 +21,70 @@ jobs:
 
       - name: Fetch & generate simple stats
         env:
-          # THIS is where you "use" your secret. Do NOT paste the token here.
-          # In repo settings you created a secret named GH_SIMPLE_STATS.
           GH_TOKEN: ${{ secrets.GH_SIMPLE_STATS }}
-          # If your username changes (it won’t), update this. Otherwise leave it.
           USERNAME: tlecocq99
         run: |
           set -euo pipefail
-          set -x
-          
-          # Ensure jq
-          if ! command -v jq >/dev/null 2>&1; then
-            sudo apt-get update && sudo apt-get install -y jq
-          fi
-          
-          read -r -d '' QUERY <<'EOF'
-          {
-            user(login: "USERNAME_PLACEHOLDER") {
-              repositories(privacy: PUBLIC, ownerAffiliations: OWNER) {
+
+          # (Optional) enable tracing for one run:
+          # set -x
+
+          # Ensure jq exists (normally already present)
+            if ! command -v jq >/dev/null 2>&1; then
+              sudo apt-get update && sudo apt-get install -y jq
+            fi
+
+          QUERY='query($login:String!){
+            user(login:$login){
+              repositories(privacy: PUBLIC, ownerAffiliations: OWNER){
                 totalCount
               }
-              contributionsCollection {
-                contributionCalendar {
+              contributionsCollection{
+                contributionCalendar{
                   totalContributions
                 }
               }
             }
-          }
-          EOF
-          QUERY="${QUERY//USERNAME_PLACEHOLDER/$USERNAME}"
-          
-          # Use a temp file to capture HTTP status and body separately
-          HTTP_RESPONSE=$(mktemp)
-          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$HTTP_RESPONSE" \
+          }'
+          VARIABLES='{"login":"'"$USERNAME"'"}'
+
+          TMP_BODY=$(mktemp)
+          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$TMP_BODY" \
             -H "Authorization: bearer $GH_TOKEN" \
-            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\"}" https://api.github.com/graphql) || CURL_ERR=$?
-          
-          if [[ "${CURL_ERR:-0}" -ne 0 ]]; then
-            echo "Curl command failed (network or DNS). Exit code: $CURL_ERR"
-            cat "$HTTP_RESPONSE" || true
+            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\",\"variables\":$VARIABLES}" https://api.github.com/graphql)
+
+          RESPONSE=$(cat "$TMP_BODY")
+          rm -f "$TMP_BODY"
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Non-200 HTTP status: $HTTP_CODE"
+            echo "Response:"
+            echo "$RESPONSE"
             exit 1
           fi
-          
-          RESPONSE=$(cat "$HTTP_RESPONSE")
-          rm -f "$HTTP_RESPONSE"
-          
-          echo "HTTP_CODE=$HTTP_CODE"
-          echo "Raw GraphQL response:"
-          echo "$RESPONSE"
-          
-          # If not 200, bail early with details
-          if [[ "$HTTP_CODE" != "200" ]]; then
-            echo "Non-200 HTTP status from GraphQL API"
-            exit 1
-          fi
-          
-          # Check for errors array with jq (safer)
+
           if echo "$RESPONSE" | jq -e '.errors' >/dev/null 2>&1; then
-            echo "GraphQL errors detected:"
+            echo "GraphQL errors:"
             echo "$RESPONSE" | jq '.errors'
-            # Common causes: insufficient token scopes, fine-grained token missing access, or rate limiting.
             exit 1
           fi
-          
-          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
+
           TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount // 0')
-          
-          # Sanity check values
-          if [[ "$TOTAL_CONTRIB" == "null" || "$TOTAL_PUBLIC_REPOS" == "null" ]]; then
-            echo "Parsed null values (likely permissions/structure issue)."
+          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
+
+          # Sanity check
+          if [ -z "$TOTAL_PUBLIC_REPOS" ] || [ -z "$TOTAL_CONTRIB" ]; then
+            echo "Parsed empty values; raw response:"
+            echo "$RESPONSE"
             exit 1
           fi
-          
+
           cat > simple-stats.md <<EOF
           **Quick Stats (Auto-Updated)**  
           Public Repos: ${TOTAL_PUBLIC_REPOS} • Last 12 Months Contributions: ${TOTAL_CONTRIB}  
           _Last updated: $(date -u +"%Y-%m-%d %H:%M UTC")_
           EOF
-          
+
           if git diff --quiet simple-stats.md 2>/dev/null; then
             echo "No changes detected; skipping commit."
           else
@@ -107,4 +93,5 @@ jobs:
             git add simple-stats.md
             git commit -m "chore: update simple stats"
             git push
+            echo "Updated simple-stats.md committed."
           fi
