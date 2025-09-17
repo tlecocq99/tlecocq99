@@ -1,72 +1,113 @@
-name: Simple Stats
+name: Simple Stats (DEBUG)
 
 on:
-  schedule:
-    - cron: "30 6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
-concurrency:
-  group: simple-stats
-  cancel-in-progress: false
-
 jobs:
-  stats:
+  debug-stats:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch & generate simple stats
+      - name: Debug GraphQL request
         env:
           GH_TOKEN: ${{ secrets.GH_SIMPLE_STATS }}
           USERNAME: tlecocq99
         run: |
           set -euo pipefail
 
+          echo "Step 1: Environment sanity"
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "GH_TOKEN is empty (secret not found)"; exit 1
+          fi
+          echo "GH_TOKEN length: ${#GH_TOKEN}"
+          if printf '%s' "$GH_TOKEN" | grep -q '"'; then
+            echo "WARNING: Token appears to contain double quotes. Recreate the secret WITHOUT wrapping quotes."; fi
+          if printf '%s' "$GH_TOKEN" | grep -q '[[:space:]]'; then
+            echo "NOTE: Token contains whitespace (possibly newline). That should NOT cause this error, but consider recreating cleanly."; fi
+
           if ! command -v jq >/dev/null 2>&1; then
             sudo apt-get update && sudo apt-get install -y jq
           fi
 
-          QUERY='query($login:String!){
+          echo
+          echo "Step 2: Minimal viewer query test"
+          MIN_QUERY='query { viewer { login } }'
+          MIN_BODY=$(jq -n --arg q "$MIN_QUERY" '{query:$q}')
+
+          printf '%s' "$MIN_BODY" > min_body.json
+          echo "Minimal body pretty:"
+          jq . min_body.json
+
+          echo "Hex dump of minimal body:"
+          od -An -tx1 min_body.json
+
+          echo
+          echo "Sending minimal query..."
+          curl --trace-ascii trace_min.txt -sS -o min_resp.json -w '%{http_code}' \
+            -H "Authorization: bearer $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-binary @min_body.json \
+            https://api.github.com/graphql > min_http_code.txt || { echo "Curl minimal failed"; cat trace_min.txt; exit 1; }
+
+          MIN_CODE=$(cat min_http_code.txt)
+          echo "Minimal query HTTP code: $MIN_CODE"
+          echo "Minimal raw response:"
+          cat min_resp.json; echo
+
+          if [ "$MIN_CODE" != "200" ]; then
+            echo "Minimal query failed with $MIN_CODE. Dumping curl trace:"
+            sed -n '1,200p' trace_min.txt
+            exit 1
+          fi
+
+          echo
+          echo "Step 3: Full stats query"
+          FULL_QUERY='query($login:String!){
             user(login:$login){
               repositories(privacy: PUBLIC, ownerAffiliations: OWNER){ totalCount }
               contributionsCollection { contributionCalendar { totalContributions } }
             }
           }'
 
-          BODY=$(jq -n --arg q "$QUERY" --arg login "$USERNAME" '{query:$q, variables:{login:$login}}')
+          FULL_BODY=$(jq -n --arg q "$FULL_QUERY" --arg login "$USERNAME" '{query:$q, variables:{login:$login}}')
+          printf '%s' "$FULL_BODY" > full_body.json
 
-          echo "Request body to GraphQL:"
-          echo "$BODY" | jq .
+          echo "Full body pretty:"
+          jq . full_body.json
 
-          HTTP_FILE=$(mktemp)
-          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$HTTP_FILE" \
+            echo "Hex dump of full body:"
+            od -An -tx1 full_body.json
+
+          echo
+          echo "Sending full query..."
+          curl --trace-ascii trace_full.txt -sS -o full_resp.json -w '%{http_code}' \
             -H "Authorization: bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
-            --data-binary "$BODY" \
-            https://api.github.com/graphql)
+            --data-binary @full_body.json \
+            https://api.github.com/graphql > full_http_code.txt || { echo "Curl full failed"; cat trace_full.txt; exit 1; }
 
-          RESPONSE=$(cat "$HTTP_FILE")
-          rm -f "$HTTP_FILE"
+          FULL_CODE=$(cat full_http_code.txt)
+          echo "Full query HTTP code: $FULL_CODE"
+          echo "Full raw response:"
+          cat full_resp.json; echo
 
-          echo "HTTP_CODE=$HTTP_CODE"
-          if [ "$HTTP_CODE" != "200" ]; then
-            echo "Non-200 response:"
-            echo "$RESPONSE"
+          if [ "$FULL_CODE" != "200" ]; then
+            echo "Full query failed. Showing first 200 lines of trace:"
+            sed -n '1,200p' trace_full.txt
             exit 1
           fi
 
-          if echo "$RESPONSE" | jq -e '.errors' >/dev/null 2>&1; then
-            echo "GraphQL errors:"
-            echo "$RESPONSE" | jq '.errors'
-            exit 1
-          fi
+          echo
+          echo "Step 4: Extract values"
+          TOTAL_PUBLIC_REPOS=$(jq -r '.data.user.repositories.totalCount // 0' full_resp.json)
+          TOTAL_CONTRIB=$(jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0' full_resp.json)
 
-            TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount // 0')
-            TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
+          echo "Parsed: repos=$TOTAL_PUBLIC_REPOS contributions=$TOTAL_CONTRIB"
 
           cat > simple-stats.md <<EOF
           **Quick Stats (Auto-Updated)**  
@@ -80,7 +121,6 @@ jobs:
             git config user.name "github-actions"
             git config user.email "actions@users.noreply.github.com"
             git add simple-stats.md
-            git commit -m "chore: update simple stats"
+            git commit -m "chore: update simple stats (debug pass)"
             git push
-            echo "Updated simple-stats.md committed."
           fi
