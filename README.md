@@ -120,8 +120,17 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 ## Stats & Activity
 
 <p>
-  <img height="165" alt="GitHub Stats" src="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&include_all_commits=true&count_private=true&theme=transparent" />
-  <img height="165" alt="Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=tlecocq99&layout=compact&langs_count=8&theme=transparent" />
+  <picture>
+  <source
+    srcset="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&theme=dark"
+    media="(prefers-color-scheme: dark)"
+  />
+  <source
+    srcset="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true"
+    media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+  />
+  <img src="https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true" />
+</picture>
 </p>
 
 <p>
