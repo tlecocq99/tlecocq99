@@ -29,13 +29,12 @@ jobs:
         run: |
           set -euo pipefail
           set -x
-
-          # Ensure jq exists (usually already installed)
+          
+          # Ensure jq
           if ! command -v jq >/dev/null 2>&1; then
             sudo apt-get update && sudo apt-get install -y jq
           fi
-
-          # GraphQL query (public repo count + last 12 months contributions)
+          
           read -r -d '' QUERY <<'EOF'
           {
             user(login: "USERNAME_PLACEHOLDER") {
@@ -51,25 +50,55 @@ jobs:
           }
           EOF
           QUERY="${QUERY//USERNAME_PLACEHOLDER/$USERNAME}"
-
-          RESPONSE=$(curl -s -H "Authorization: bearer $GH_TOKEN" \
-            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\"}" https://api.github.com/graphql)
-
-          if echo "$RESPONSE" | grep -q '"errors"'; then
-            echo "GraphQL error in response:"
-            echo "$RESPONSE"
+          
+          # Use a temp file to capture HTTP status and body separately
+          HTTP_RESPONSE=$(mktemp)
+          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$HTTP_RESPONSE" \
+            -H "Authorization: bearer $GH_TOKEN" \
+            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\"}" https://api.github.com/graphql) || CURL_ERR=$?
+          
+          if [[ "${CURL_ERR:-0}" -ne 0 ]]; then
+            echo "Curl command failed (network or DNS). Exit code: $CURL_ERR"
+            cat "$HTTP_RESPONSE" || true
             exit 1
           fi
-
-          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions')
-          TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount')
-
+          
+          RESPONSE=$(cat "$HTTP_RESPONSE")
+          rm -f "$HTTP_RESPONSE"
+          
+          echo "HTTP_CODE=$HTTP_CODE"
+          echo "Raw GraphQL response:"
+          echo "$RESPONSE"
+          
+          # If not 200, bail early with details
+          if [[ "$HTTP_CODE" != "200" ]]; then
+            echo "Non-200 HTTP status from GraphQL API"
+            exit 1
+          fi
+          
+          # Check for errors array with jq (safer)
+          if echo "$RESPONSE" | jq -e '.errors' >/dev/null 2>&1; then
+            echo "GraphQL errors detected:"
+            echo "$RESPONSE" | jq '.errors'
+            # Common causes: insufficient token scopes, fine-grained token missing access, or rate limiting.
+            exit 1
+          fi
+          
+          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
+          TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount // 0')
+          
+          # Sanity check values
+          if [[ "$TOTAL_CONTRIB" == "null" || "$TOTAL_PUBLIC_REPOS" == "null" ]]; then
+            echo "Parsed null values (likely permissions/structure issue)."
+            exit 1
+          fi
+          
           cat > simple-stats.md <<EOF
-          **Quick Stats (Auto‑Updated)**  
+          **Quick Stats (Auto-Updated)**  
           Public Repos: ${TOTAL_PUBLIC_REPOS} • Last 12 Months Contributions: ${TOTAL_CONTRIB}  
           _Last updated: $(date -u +"%Y-%m-%d %H:%M UTC")_
           EOF
-
+          
           if git diff --quiet simple-stats.md 2>/dev/null; then
             echo "No changes detected; skipping commit."
           else
