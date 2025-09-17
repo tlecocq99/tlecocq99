@@ -52,7 +52,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://oslo-vikings.vercel.app/" target="_blank"><strong>Oslo-Vikings</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oslo-Vikings">
-    <img alt="Oslo-Vikings repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent&cache_seconds=7200" />
+    <img alt="Oslo-Vikings repo card" src="github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oslo-Vikings&theme=transparent&cache_seconds=7200" />
   </a>
   <br/>
   <em>Modern club site emphasizing clean UI structure, SEO metadata, and fast load.</em><br/>
@@ -62,7 +62,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://oil-x.vercel.app/" target="_blank"><strong>Oil-X</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oil-X">
-    <img alt="Oil-X repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=transparent&cache_seconds=7200" />
+    <img alt="Oil-X repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=transparent&cache_seconds=7200" />
   </a>
   <br/>
   <em>Product-focused build showcasing reusable component patterns & brand cohesion.</em><br/>
@@ -74,7 +74,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://github.com/ClearChoicePools/ClearChoice" target="_blank"><strong>Clear Choice Pools</strong></a><br/>
   <a href="https://github.com/ClearChoicePools/ClearChoice">
-    <img alt="Clear Choice Pools repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=transparent&cache_seconds=7200&show_owner=true" />
+    <img alt="Clear Choice Pools repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=transparent&cache_seconds=7200&show_owner=true" />
   </a>
   <br/>
   <em>Brand-site work focusing on content structure & maintainability for future scaling.</em><br/>
@@ -84,7 +84,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://github.com/tlecocq99/HummingbirdMobileSips" target="_blank"><strong>Hummingbird Sips</strong></a><br/>
   <a href="https://github.com/tlecocq99/HummingbirdMobileSips">
-    <img alt="Hummingbird Sips repo card" src="https://github-readme-stats.vercel.app/api/pin/?username=tlecocq99&repo=HummingbirdMobileSips&theme=transparent&cache_seconds=7200" />
+    <img alt="Hummingbird Sips repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=HummingbirdMobileSips&theme=transparent&cache_seconds=7200" />
   </a>
   <br/>
   <em>Hospitality brand presence; design-forward layout with performance + SEO fundamentals.</em><br/>
@@ -119,10 +119,10 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 
 ## Stats & Activity
 
-[![Thomas' GitHub stats](https://github-readme-stats.vercel.app/api?username=tlecocq99&show_icons=true&count_private=true&cache_seconds=7200)](https://github.com/anuraghazra/github-readme-stats)
+[![Thomas' GitHub stats](https://github-readme-stats-rho-orpin-66.vercel.app/api?username=tlecocq99&show_icons=true&count_private=true&cache_seconds=7200)](https://github.com/anuraghazra/github-readme-stats)
 
 <p>
-  <img height="160" alt="Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=tlecocq99&layout=compact&langs_count=8&theme=transparent&cache_seconds=7200" />
+  <img height="160" alt="Top Languages" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/top-langs/?username=tlecocq99&layout=compact&langs_count=8&theme=transparent&cache_seconds=7200" />
 </p>
 <p>
   <img alt="GitHub Streak" src="https://streak-stats.demolab.com?user=tlecocq99&theme=transparent&hide_border=true" />
