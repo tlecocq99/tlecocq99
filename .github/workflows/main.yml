@@ -1,0 +1,80 @@
+name: Simple Stats
+
+on:
+  schedule:
+    - cron: "30 6 * * *"   # (Optional) Daily at 06:30 UTC. Change or remove if you prefer weekly.
+  workflow_dispatch:        # Lets you run it manually from the Actions tab.
+
+permissions:
+  contents: write           # Needed so the workflow can commit simple-stats.md
+
+concurrency:
+  group: simple-stats       # Prevent overlapping runs
+  cancel-in-progress: false
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch & generate simple stats
+        env:
+          # THIS is where you "use" your secret. Do NOT paste the token here.
+          # In repo settings you created a secret named GH_SIMPLE_STATS.
+          GH_TOKEN: ${{ secrets.GH_SIMPLE_STATS }}
+          # If your username changes (it won’t), update this. Otherwise leave it.
+          USERNAME: tlecocq99
+        run: |
+          set -euo pipefail
+
+          # Ensure jq exists (usually already installed)
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
+
+          # GraphQL query (public repo count + last 12 months contributions)
+          read -r -d '' QUERY <<'EOF'
+          {
+            user(login: "USERNAME_PLACEHOLDER") {
+              repositories(privacy: PUBLIC, ownerAffiliations: OWNER) {
+                totalCount
+              }
+              contributionsCollection {
+                contributionCalendar {
+                  totalContributions
+                }
+              }
+            }
+          }
+          EOF
+          QUERY="${QUERY//USERNAME_PLACEHOLDER/$USERNAME}"
+
+          RESPONSE=$(curl -s -H "Authorization: bearer $GH_TOKEN" \
+            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\"}" https://api.github.com/graphql)
+
+          if echo "$RESPONSE" | grep -q '"errors"'; then
+            echo "GraphQL error in response:"
+            echo "$RESPONSE"
+            exit 1
+          fi
+
+          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions')
+          TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount')
+
+          cat > simple-stats.md <<EOF
+**Quick Stats (Auto‑Updated)**  
+Public Repos: ${TOTAL_PUBLIC_REPOS} • Last 12 Months Contributions: ${TOTAL_CONTRIB}  
+_Last updated: $(date -u +"%Y-%m-%d %H:%M UTC")_
+EOF
+
+          if git diff --quiet simple-stats.md 2>/dev/null; then
+            echo "No changes detected; skipping commit."
+          else
+            git config user.name "github-actions"
+            git config user.email "actions@users.noreply.github.com"
+            git add simple-stats.md
+            git commit -m "chore: update simple stats"
+            git push
+          fi
