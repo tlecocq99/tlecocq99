@@ -64,10 +64,10 @@ jobs:
           TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount')
 
           cat > simple-stats.md <<EOF
-**Quick Stats (Auto‑Updated)**  
-Public Repos: ${TOTAL_PUBLIC_REPOS} • Last 12 Months Contributions: ${TOTAL_CONTRIB}  
-_Last updated: $(date -u +"%Y-%m-%d %H:%M UTC")_
-EOF
+          **Quick Stats (Auto‑Updated)**  
+          Public Repos: ${TOTAL_PUBLIC_REPOS} • Last 12 Months Contributions: ${TOTAL_CONTRIB}  
+          _Last updated: $(date -u +"%Y-%m-%d %H:%M UTC")_
+          EOF
 
           if git diff --quiet simple-stats.md 2>/dev/null; then
             echo "No changes detected; skipping commit."
