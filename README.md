@@ -78,7 +78,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
   </a>
   <br/>
   <em>Brand-site work focusing on content structure & maintainability for future scaling.</em><br/>
-  <sub>Stack: Next.js, UI fundamentals, SEO.</sub>
+  <sub>Stack: Next.js, UI fundamentals, SEO.</sub><br/>
   <a href="https://clearchoicepools.org/">Live site →</a>
 </td>
 <td width="50%">
