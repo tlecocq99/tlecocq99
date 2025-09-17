@@ -1,5 +1,5 @@
 # 💫 About Me:
-🔭 I’m currently taking a Software Engineering bootcamp with Institute of Data<br>🌱 I’m currently learning HTML, CSS and JavaScript!<br>💬 Ask me about 😸 Cats!! 😸<br>⚡ I am Bilingual in English and French<br>✈️Half Polish, half Belgian!✈️
+🔭 Graduate of the Software Engineering bootcamp with Institute of Data<br>🌱 I’m currently refining my skills with React, Next.js, Vite, Google Console & more!<br>⚡ I am Bilingual in English and French<br>✈️Half Polish, half Belgian!✈️
 
 
 ## 🌐 Socials:
