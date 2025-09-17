@@ -2,7 +2,7 @@ name: Simple Stats
 
 on:
   schedule:
-    - cron: "30 6 * * *"   # Daily at 06:30 UTC
+    - cron: "30 6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -26,39 +26,35 @@ jobs:
         run: |
           set -euo pipefail
 
-          # (Optional) enable tracing for one run:
-          # set -x
-
-          # Ensure jq exists (normally already present)
-            if ! command -v jq >/dev/null 2>&1; then
-              sudo apt-get update && sudo apt-get install -y jq
-            fi
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
 
           QUERY='query($login:String!){
             user(login:$login){
-              repositories(privacy: PUBLIC, ownerAffiliations: OWNER){
-                totalCount
-              }
-              contributionsCollection{
-                contributionCalendar{
-                  totalContributions
-                }
-              }
+              repositories(privacy: PUBLIC, ownerAffiliations: OWNER){ totalCount }
+              contributionsCollection { contributionCalendar { totalContributions } }
             }
           }'
-          VARIABLES='{"login":"'"$USERNAME"'"}'
 
-          TMP_BODY=$(mktemp)
-          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$TMP_BODY" \
+          BODY=$(jq -n --arg q "$QUERY" --arg login "$USERNAME" '{query:$q, variables:{login:$login}}')
+
+          echo "Request body to GraphQL:"
+          echo "$BODY" | jq .
+
+          HTTP_FILE=$(mktemp)
+          HTTP_CODE=$(curl -sS -w "%{http_code}" -o "$HTTP_FILE" \
             -H "Authorization: bearer $GH_TOKEN" \
-            -X POST -d "{\"query\":\"${QUERY//$'\n'/ }\",\"variables\":$VARIABLES}" https://api.github.com/graphql)
+            -H "Content-Type: application/json" \
+            --data-binary "$BODY" \
+            https://api.github.com/graphql)
 
-          RESPONSE=$(cat "$TMP_BODY")
-          rm -f "$TMP_BODY"
+          RESPONSE=$(cat "$HTTP_FILE")
+          rm -f "$HTTP_FILE"
 
+          echo "HTTP_CODE=$HTTP_CODE"
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "Non-200 HTTP status: $HTTP_CODE"
-            echo "Response:"
+            echo "Non-200 response:"
             echo "$RESPONSE"
             exit 1
           fi
@@ -69,15 +65,8 @@ jobs:
             exit 1
           fi
 
-          TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount // 0')
-          TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
-
-          # Sanity check
-          if [ -z "$TOTAL_PUBLIC_REPOS" ] || [ -z "$TOTAL_CONTRIB" ]; then
-            echo "Parsed empty values; raw response:"
-            echo "$RESPONSE"
-            exit 1
-          fi
+            TOTAL_PUBLIC_REPOS=$(echo "$RESPONSE" | jq -r '.data.user.repositories.totalCount // 0')
+            TOTAL_CONTRIB=$(echo "$RESPONSE" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
 
           cat > simple-stats.md <<EOF
           **Quick Stats (Auto-Updated)**  
