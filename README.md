@@ -62,7 +62,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://oil-x.vercel.app/" target="_blank"><strong>Oil-X</strong></a><br/>
   <a href="https://github.com/tlecocq99/Oil-X">
-    <img alt="Oil-X repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=holi&cache_seconds=7200" />
+    <img alt="Oil-X repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=Oil-X&theme=blue_navy&cache_seconds=7200" />
   </a>
   <br/>
   <em>Product-focused build showcasing reusable component patterns & brand cohesion.</em><br/>
@@ -74,7 +74,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://github.com/ClearChoicePools/ClearChoice" target="_blank"><strong>Clear Choice Pools</strong></a><br/>
   <a href="https://github.com/ClearChoicePools/ClearChoice">
-    <img alt="Clear Choice Pools repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=holi&cache_seconds=7200&show_owner=true" />
+    <img alt="Clear Choice Pools repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=ClearChoicePools&repo=ClearChoice&theme=blue_navy&cache_seconds=7200&show_owner=true" />
   </a>
   <br/>
   <em>Brand-site work focusing on content structure & maintainability for future scaling.</em><br/>
@@ -84,7 +84,7 @@ I’m a Junior Software Developer recently certified in Software Engineering (In
 <td width="50%">
   <a href="https://github.com/tlecocq99/HummingbirdMobileSips" target="_blank"><strong>Hummingbird Sips</strong></a><br/>
   <a href="https://github.com/tlecocq99/HummingbirdMobileSips">
-    <img alt="Hummingbird Sips repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=HummingbirdMobileSips&theme= holi&cache_seconds=7200" />
+    <img alt="Hummingbird Sips repo card" src="https://github-readme-stats-rho-orpin-66.vercel.app/api/pin/?username=tlecocq99&repo=HummingbirdMobileSips&theme=holi&cache_seconds=7200" />
   </a>
   <br/>
   <em>Hospitality brand presence; design-forward layout with performance + SEO fundamentals.</em><br/>
